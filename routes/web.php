@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 Route::get('chat','ChatController@index');
 Route::get('send',function(){
 
@@ -21,9 +21,19 @@ Route::get('send',function(){
 });
 Route::post('sending','ChatController@send');
 
-Route::get('/login', function () {
+Route::get('/', function () {
     return view('login');
 });
-Route::get('/register', function () {
-    return view('register');
+// Route::get('/register', function () {
+//     return view('register');
+// });
+
+Auth::routes();
+Route::post('register','UserController@register')->name('register');
+Route::group(["middleware"=>'auth'],function(){
+   
+   Route::get('/home', 'HomeController@index')->name('home');
+
 });
+
+

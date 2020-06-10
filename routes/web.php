@@ -20,3 +20,10 @@ Route::get('send',function(){
 	return view('sender');
 });
 Route::post('sending','ChatController@send');
+
+Route::get('/login', function () {
+    return view('login');
+});
+Route::get('/register', function () {
+    return view('register');
+});

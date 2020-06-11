@@ -14,6 +14,7 @@
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
 Route::get('chat','ChatController@index');
 Route::get('send',function(){
 
@@ -22,7 +23,14 @@ Route::get('send',function(){
 Route::post('sending','ChatController@send');
 
 Route::get('/', function () {
-    return view('login');
+	$user = Auth::user();
+   if($user){
+   	return redirect('/home');
+   }
+   	else{
+   		 return view('login');
+   	}
+   
 });
 // Route::get('/register', function () {
 //     return view('register');

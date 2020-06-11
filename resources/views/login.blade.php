@@ -66,7 +66,7 @@
                                         <span>Forgot Password</span>
                                     </label>
                                     <div class="signup">
-                                        <a>Sign In</a>
+                                        <a>Sign Up</a>
                                     </div>
                                 </div>
                             </div>

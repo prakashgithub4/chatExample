@@ -21,6 +21,14 @@ input[type="submit"]{
     font-size: 26px;
     border-radius: 5px;
 }
+input[type="button"]{
+    background-color: #0e22b9;
+    color: #fff;
+    border-bottom: none;
+    font-size: 26px;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
 body{
     font-family: 'Open Sans', sans-serif;

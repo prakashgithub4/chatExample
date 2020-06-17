@@ -13,8 +13,10 @@
     <script src="{{ asset('public/js/app.js') }}" defer></script>
 
     <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{url('public/assets/css/style.css')}}">
+    <script src="{{url('public/assets/js/jquery.min.js')}}"></script>
+    <script src="{{url('public/assets/js/custom.js')}}"></script>
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
     <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
@@ -71,10 +73,13 @@
                 </div>
             </div>
         </nav>
-
+      <!-- header end -->
         <main class="py-4">
             @yield('content')
         </main>
     </div>
+    
+    <!-- footer  -->
+
 </body>
 </html>

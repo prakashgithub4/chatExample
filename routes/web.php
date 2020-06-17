@@ -1,5 +1,5 @@
 <?php
-
+use App\Events\Indivisual;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -44,4 +44,12 @@ Route::group(["middleware"=>'auth'],function(){
 
 });
 
+
+Route::get('event',function(){
+    event(new Indivisual("hi there"));
+});
+Route::get('listen',function(){
+	
+  return view('listenbroadcast');
+});
 

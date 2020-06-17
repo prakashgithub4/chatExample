@@ -1,48 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    You are logged in!
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-<div class="chat_main">
-    
-    <div class="chat_main_frame">
-        <!--chat header---->
-        <header class="chat_header">
-            <div class="logo_part">				
-				<img class="logo" src="{{url('public/assets/images/logo1.png')}}" alt="logo">   
-			</div>
-            <div class="right_part">
-                <nav>
-                    <ul>
-                        <li class="active">Chat</li>
-                        <li>Group</li>
-                        <li>Online</li>
-                    </ul>
-                </nav>
-                <div class="profile">
-                    <span>Raja Kar</span>
-                </div>
-            </div>
-        </header>
-        <!--chat header end---->
-        <div class="chat_box">
+      
             <div class="chat_frame">
                 <div class="chat_frnd_list">
                     <div class="msg_chat_header">
@@ -51,7 +10,7 @@
                         </div>
                     </div>
                     <ul>
-                        <li>
+                        <!-- <li>
                             <div class="frnd_list_list">
                                 <div class="icon"><img style="width: 40px;" src="{{url('public/assets/images/avatar_male.svg')}}"></div>
                                 <div class="frnd_details">
@@ -59,17 +18,20 @@
                                     <p>This is Message...</p>
                                 </div>
                             </div>
-                        </li>
+                        </li> -->
+                          @foreach($users as $user)
                         <li>
                             <div class="frnd_list_list">
                                 <div class="icon"><img style="width: 40px;" src="{{url('public/assets/images/avatar_male.svg')}}"></div>
                                 <div class="frnd_details">
-                                    <p>Samir Nandi</p>
+                                    <p>{{ $user->name }}</p>
                                     <p>This is Message...</p>
                                 </div>
                             </div>
                         </li>
+                          @endforeach
                     </ul>
+
                     
                 </div>
                 <div class="chat_content">
@@ -132,30 +94,23 @@
                         </div>
                     </div>
                     <ul>
+                          @foreach($activechat as $online)
                         <li>
                             <div class="frnd_list_list">
                                 <div class="icon"><img style="width: 40px;" src="{{url('public/assets/images/avatar_male.svg')}}"></div>
                                 <div class="frnd_details">
-                                    <p>Raja Kar</p>
+                                    <p>{{$online['name']}}</p>
                                 </div>
                                 <div class="sign"></div>
                             </div>
                         </li>
-                        <li>
-                            <div class="frnd_list_list">
-                                <div class="icon"><img style="width: 40px;" src="{{url('public/assets/images/avatar_male.svg')}}"></div>
-                                <div class="frnd_details">
-                                    <p>Samir Nandi</p>
-                                </div>
-                                <div class="sign"></div>
-                            </div>
-                        </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+     
+  
+
 @endsection
 
 

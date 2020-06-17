@@ -19,40 +19,28 @@
 	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
-    <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
+   <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    
+      <!-- header end -->
+      <div class="chat_main">
+       <div class="chat_main_frame">
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-
+       <header class="chat_header">
+            <div class="logo_part">             
+                <img class="logo" src="{{url('public/assets/images/logo1.png')}}" alt="logo">   
+            </div>
+            <div class="right_part">
+                <nav>
+                    <ul>
+                        <li class="active">Chat</li>
+                        <li>Group</li>
+                        <li>Online</li>
                     </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                </nav>
+                <div class="profile">
+                   <a id="navbarDropdown"  href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
@@ -67,19 +55,139 @@
                                         @csrf
                                     </form>
                                 </div>
-                            </li>
-                        @endguest
-                    </ul>
+
                 </div>
             </div>
-        </nav>
-      <!-- header end -->
-        <main class="py-4">
+        </header>
+         <div class="chat_box">
             @yield('content')
-        </main>
+       
+
     </div>
+    </div>
+</div>
     
     <!-- footer  -->
+<script>
+    var receiver_id = '';
+    var my_id = "{{ Auth::id() }}";
+    $(document).ready(function () {
+        // ajax setup form csrf token
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('12d9da88c545d19af2c5', {
+            cluster: 'eu',
+            forceTLS: true
+        });
+
+        var channel = pusher.subscribe('my-channel');
+
+        channel.bind('my-event', function (data) {
+            // alert(JSON.stringify(data));
+            if (my_id == data.from) {
+                $('#' + data.to).click();
+            } else if (my_id == data.to) {
+                if (receiver_id == data.from) {
+                    // if receiver is selected, reload the selected user ...
+                    $('#' + data.from).click();
+                    
+
+                } else {
+                    // if receiver is not seleted, add notification for that user
+                    var pending = parseInt($('#' + data.from).find('.pending').html());
+
+                    if (pending) {
+                        $('#' + data.from).find('.pending').html(pending + 1);
+                    } else {
+                        $('#' + data.from).append('<span class="pending">1</span>');
+                    }
+                }
+            }
+            if(data.status=='active'){
+              
+              $("#status_"+data.id).html(data.status)
+            }
+            else{
+               $("#status_"+data.id).html(data.status)
+            }
+        });
+
+        $('.user').click(function () {
+            $('.user').removeClass('active');
+            $(this).addClass('active');
+            $(this).find('.pending').remove();
+
+            receiver_id = $(this).attr('id');
+            
+            $.ajax({
+                type: "get",
+                url: "message/" + receiver_id, // need to create this route
+                data: "",
+                cache: false,
+                success: function (data) {
+                    $('#messages').html(data);
+                    scrollToBottomFunc();
+                }
+            });
+        });
+
+        $(document).on('keyup', '.input-text input', function (e) {
+            var message = $(this).val();
+
+            // check if enter key is pressed and message is not null also receiver is selected
+            if (e.keyCode == 13 && message != '' && receiver_id != '') {
+                $(this).val(''); // while pressed enter text box will be empty
+
+                var datastr = "receiver_id=" + receiver_id + "&message=" + message;
+                $.ajax({
+                    type: "post",
+                    url: "message", // need to create this post route
+                    data: datastr,
+                    cache: false,
+                    success: function (data) {
+
+                    },
+                    error: function (jqXHR, status, err) {
+                    },
+                    complete: function () {
+                        scrollToBottomFunc();
+                    }
+                })
+            }
+        });
+    });
+
+    // make a function to scroll down auto
+    function scrollToBottomFunc() {
+        $('.message-wrapper').animate({
+            scrollTop: $('.message-wrapper').get(0).scrollHeight
+        }, 50);
+    }
+
+    function inactive(){
+    
+      let u_id = "{{Auth::id()}}";
+      let url = "{{url('status/')}}"+"/"+u_id+"/"+'inactive';
+     
+      $.ajax({
+                type: "get",
+                url:url , // need to create this route
+               
+                cache: false,
+                success: function (data) {
+               
+                }
+            });
+
+
+    }
+</script>
 </body>
 </html>

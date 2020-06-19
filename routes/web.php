@@ -45,11 +45,7 @@ Route::group(["middleware"=>'auth'],function(){
 });
 
 
-Route::get('event',function(){
-    event(new Indivisual("hi there"));
-});
-Route::get('listen',function(){
-	
-  return view('listenbroadcast');
-});
+Route::get('/message/{id}', 'HomeController@getMessage')->name('message');
+Route::post('message', 'HomeController@sendMessage');
 
+Route::get('status/{id?}/{status?}','HomeController@status');

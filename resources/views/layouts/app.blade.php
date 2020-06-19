@@ -47,6 +47,7 @@
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
+                                                     inactive();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
@@ -68,6 +69,11 @@
 </div>
     
     <!-- footer  -->
+<script src="https://js.pusher.com/5.0/pusher.min.js"></script><script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+
 <script>
     var receiver_id = '';
     var my_id = "{{ Auth::id() }}";
@@ -132,7 +138,7 @@
                 data: "",
                 cache: false,
                 success: function (data) {
-                    $('#messages').html(data);
+                    $('.chat_cont').html(data);
                     scrollToBottomFunc();
                 }
             });
@@ -163,16 +169,40 @@
             }
         });
     });
+     function sendmessage(){
+          var message = $("#message").val();
+          
+            // check if enter key is pressed and message is not null also receiver is selected
+            // if (e.keyCode == 13 && message != '' && receiver_id != '') {
+            //     $(this).val(''); // while pressed enter text box will be empty
 
+                var datastr = "receiver_id=" + receiver_id + "&message=" + message;
+                $.ajax({
+                    type: "post",
+                    url: "message", // need to create this post route
+                    data: datastr,
+                    cache: false,
+                    success: function (data) {
+
+                    },
+                    error: function (jqXHR, status, err) {
+                    },
+                    complete: function () {
+                        scrollToBottomFunc();
+                    }
+                })
+           // }
+
+     }
     // make a function to scroll down auto
     function scrollToBottomFunc() {
-        $('.message-wrapper').animate({
-            scrollTop: $('.message-wrapper').get(0).scrollHeight
+        $('.chat_cont').animate({
+            scrollTop: $('.chat_cont').get(0).scrollHeight
         }, 50);
     }
 
     function inactive(){
-    
+     alert("ok");
       let u_id = "{{Auth::id()}}";
       let url = "{{url('status/')}}"+"/"+u_id+"/"+'inactive';
      
